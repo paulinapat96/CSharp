@@ -1,0 +1,7 @@
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\bin\Debug\CSharp Lab1.exe.config
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\bin\Debug\CSharp Lab1.exe
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\bin\Debug\CSharp Lab1.pdb
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\obj\Debug\CSharp Lab1.csprojAssemblyReference.cache
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\obj\Debug\CSharp Lab1.csproj.CoreCompileInputs.cache
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\obj\Debug\CSharp Lab1.exe
+C:\Paulina\Studia\CSharp\CSharp Lab1\CSharp Lab1\obj\Debug\CSharp Lab1.pdb
