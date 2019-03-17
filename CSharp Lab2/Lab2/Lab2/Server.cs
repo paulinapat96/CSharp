@@ -69,44 +69,63 @@ namespace Lab2
                 //Listening loop
                 while (true)
                 {
+
                     Console.Write("Waiting for a connection... ");
                     TcpClient client = server.AcceptTcpClient();
                     Console.WriteLine("Connected!");
 
                     dataRequest = null;
 
+
                     int i;
                     NetworkStream stream = client.GetStream();
                     StreamWriter writer = new System.IO.StreamWriter(client.GetStream());
 
-                    // Loop to receive all the data sent by the client.
-                    while (stream.CanRead && (i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                    try
                     {
-                        string content = GenerateContent(AppDomain.CurrentDomain.BaseDirectory  + "/index.html");
-                        string header = GenerateHeader(content.Length);
-
-                        dataRequest = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", dataRequest);
-
-                        string[] requestParams = dataRequest.Split(' ');
-
-                        if (requestParams[0].Equals("GET") && requestParams[1].Contains("html"))
+                        // Loop to receive all the data sent by the client.
+                        while (stream.CanRead && (i = stream.Read(bytes, 0, bytes.Length)) != 0)
                         {
-                            content = GenerateContent(_fileDirectory + requestParams[1].Substring(1).Split(' ')[0]);
-                            header = GenerateHeader(content.Length);
-                        }
+                            string content = GenerateContent(AppDomain.CurrentDomain.BaseDirectory + "/index.html");
+                            string header = GenerateHeader(content.Length);
 
+                            dataRequest = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                            Console.WriteLine("Received: {0}", dataRequest);
+
+                            string[] requestParams = dataRequest.Split(' ');
+
+                            if (requestParams[0].Equals("GET") && requestParams[1].Contains("html"))
+                            {
+                                content = GenerateContent(_fileDirectory + requestParams[1].Substring(1).Split(' ')[0]);
+                                header = GenerateHeader(content.Length);
+                            }
+
+                            writer.Write(header);
+                            writer.Write(content);
+
+                            writer.Flush();
+                            writer.Close();
+
+                            Console.WriteLine($"Sent: {header} \n {content}");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+
+                        string content = "Error 500";
+                        string header = GenerateHeader(content.Length);
                         writer.Write(header);
                         writer.Write(content);
 
                         writer.Flush();
                         writer.Close();
 
-                        Console.WriteLine($"Sent: {header} \n {content}");
                     }
 
                     stream.Flush();
                     client.Close();
+
                 }
             }
             catch (Exception e)
