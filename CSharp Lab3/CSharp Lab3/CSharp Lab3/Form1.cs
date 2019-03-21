@@ -36,8 +36,11 @@ namespace CSharp_Lab3
                 {
                     path = result.Split(Path.DirectorySeparatorChar);
                     infoLabel.Text += "Znaleziono plik " + path[path.Length - 1] + "\nAnalizuję...\n";
+                    
+                    string pathToCopiedFiles = CopyFiles(result.Substring(0, result.Length - path[path.Length - 1].Length), AnalyzeXML(result));
 
-                    AnalyzeXML(result);
+                    infoLabel.Text += "\n\n*** Kończę pracę i otwieram folder ze skopiowanymi plikami ***";
+                    System.Diagnostics.Process.Start("explorer.exe", pathToCopiedFiles);
                 }
                 else
                 {
@@ -67,8 +70,10 @@ namespace CSharp_Lab3
             return "";
         }
 
-        private void AnalyzeXML(string fileName)
+        private List<string> AnalyzeXML(string fileName)
         {
+            List<string> filesPaths = new List<string>();
+
             infoLabel.Text += "Znalezione pliki: ";
             XmlDocument doc = new XmlDocument();
             doc.PreserveWhitespace = true;
@@ -80,15 +85,46 @@ namespace CSharp_Lab3
             foreach (XmlNode item in elements1)
             {
                 infoLabel.Text += item.Attributes["Include"].Value + ", ";
+                filesPaths.Add(item.Attributes["Include"].Value);
             }
 
             foreach (XmlNode item in elements2)
             {
                 infoLabel.Text += item.Attributes["Include"].Value + ", ";
+                filesPaths.Add(item.Attributes["Include"].Value);
             }
 
+            infoLabel.Text += "\n";
+            return filesPaths;
         }
 
+        private string CopyFiles(string rootPath, List<string> filesPaths)
+        {
+            string nameOfCopyFolder = rootPath + "Kopia";
+            while(Directory.Exists(nameOfCopyFolder))
+            {
+                infoLabel.Text += "\nZnaleziono już folder " + nameOfCopyFolder + "\nSzukam wolnej nazwy...";
+                nameOfCopyFolder += "a";
+            }
+
+            Directory.CreateDirectory(nameOfCopyFolder);
+            infoLabel.Text += "\nTworzę folder " + nameOfCopyFolder + " i przenoszę do niego znelezione pliki.";
+
+            foreach (string filePath in filesPaths)
+            {
+                string fileName = filePath;
+
+                if (filePath.Contains(Path.DirectorySeparatorChar))
+                {
+                    string[] path = filePath.Split(Path.DirectorySeparatorChar);
+                    fileName = path[path.Length - 1];
+                }
+
+                File.Copy(rootPath + filePath, nameOfCopyFolder + Path.DirectorySeparatorChar + fileName);
+            }
+
+            return nameOfCopyFolder;
+        }
 
         private void changeFolderBtn_Click(object sender, EventArgs e)
         {
@@ -96,6 +132,7 @@ namespace CSharp_Lab3
 
             _currentPath = folderBrowserDialog1.SelectedPath;
             currentPathLabel.Text = _currentPath;
+            infoLabel.Text = "Log List:\n";
 
             StartAnalyze();
         }

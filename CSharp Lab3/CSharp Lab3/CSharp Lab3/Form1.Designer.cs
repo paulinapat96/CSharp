@@ -81,9 +81,11 @@
             // 
             this.infoLabel.AutoSize = true;
             this.infoLabel.Location = new System.Drawing.Point(29, 108);
+            this.infoLabel.MaximumSize = new System.Drawing.Size(755, 0);
             this.infoLabel.Name = "infoLabel";
-            this.infoLabel.Size = new System.Drawing.Size(0, 17);
+            this.infoLabel.Size = new System.Drawing.Size(62, 17);
             this.infoLabel.TabIndex = 4;
+            this.infoLabel.Text = "Log List:\n";
             // 
             // Form1
             // 
