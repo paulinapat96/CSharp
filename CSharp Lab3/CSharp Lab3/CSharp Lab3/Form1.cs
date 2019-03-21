@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace CSharp_Lab3
@@ -25,19 +20,17 @@ namespace CSharp_Lab3
 
         private void StartAnalyze()
         {
-            string result = FindSlnFiles();
-            if (result != "")
+            string slnFilePath = FindFile(_currentPath, "*.sln", false);
+            if (slnFilePath != "")
             {
-                string[] path = result.Split(Path.DirectorySeparatorChar);
-                infoLabel.Text += "Znaleziono plik " + path[path.Length - 1] + "\nAnalizuję...\n";
+                infoLabel.Text += "Znaleziono plik " + GetNameOfFileFromPath(slnFilePath) + "\nAnalizuję...\n";
 
-                result = FindProjFiles();
-                if (result != "")
+                string projFilePath = FindFile(_currentPath, "*.*proj", true);
+                if (projFilePath != "")
                 {
-                    path = result.Split(Path.DirectorySeparatorChar);
-                    infoLabel.Text += "Znaleziono plik " + path[path.Length - 1] + "\nAnalizuję...\n";
-                    
-                    string pathToCopiedFiles = CopyFiles(result.Substring(0, result.Length - path[path.Length - 1].Length), AnalyzeXML(result));
+                    infoLabel.Text += "Znaleziono plik " + GetNameOfFileFromPath(projFilePath) + "\nAnalizuję...\n";
+
+                    string pathToCopiedFiles = CopyFiles(GetPathOfParentDirectory(slnFilePath), AnalyzeXML(projFilePath));
 
                     infoLabel.Text += "\n\n*** Kończę pracę i otwieram folder ze skopiowanymi plikami ***";
                     System.Diagnostics.Process.Start("explorer.exe", pathToCopiedFiles);
@@ -51,20 +44,11 @@ namespace CSharp_Lab3
             {
                 infoLabel.Text += "Nie znaleziono pliku .sln\n";
             }
-
         }
 
-        private string FindSlnFiles()
+        private string FindFile(string path, string fileName, bool searchInSubdirectories)
         {
-            string[] files = Directory.GetFiles(_currentPath, "*.sln");
-
-            if(files.Length != 0) return files[0];
-            return "";
-        }
-
-        private string FindProjFiles()
-        {
-            string[] files = Directory.GetFiles(_currentPath, "*.*proj", SearchOption.AllDirectories);
+            string[] files = (searchInSubdirectories)? Directory.GetFiles(path, fileName, SearchOption.AllDirectories) : Directory.GetFiles(path, fileName);
 
             if (files.Length != 0) return files[0];
             return "";
@@ -72,65 +56,72 @@ namespace CSharp_Lab3
 
         private List<string> AnalyzeXML(string fileName)
         {
-            List<string> filesPaths = new List<string>();
+            string pathToFile = GetPathOfParentDirectory(fileName);
+            List<string> files = new List<string>();
 
-            infoLabel.Text += "Znalezione pliki: ";
             XmlDocument doc = new XmlDocument();
             doc.PreserveWhitespace = true;
             doc.Load(fileName);
 
-            XmlNodeList elements1 = doc.GetElementsByTagName("Compile");
-            XmlNodeList elements2 = doc.GetElementsByTagName("EmbeddedResource");
+            List<XmlNodeList> elements = new List<XmlNodeList>();
+            elements.Add(doc.GetElementsByTagName("Compile"));
+            elements.Add(doc.GetElementsByTagName("EmbeddedResource"));
 
-            foreach (XmlNode item in elements1)
+            infoLabel.Text += "Znalezione pliki: ";
+            foreach (XmlNodeList element in elements)
             {
-                infoLabel.Text += item.Attributes["Include"].Value + ", ";
-                filesPaths.Add(item.Attributes["Include"].Value);
-            }
-
-            foreach (XmlNode item in elements2)
-            {
-                infoLabel.Text += item.Attributes["Include"].Value + ", ";
-                filesPaths.Add(item.Attributes["Include"].Value);
+                foreach (XmlNode item in element)
+                {
+                    infoLabel.Text += item.Attributes["Include"].Value + ", ";
+                    files.Add(pathToFile + item.Attributes["Include"].Value);
+                }
             }
 
             infoLabel.Text += "\n";
-            return filesPaths;
+            return files;
         }
 
-        private string CopyFiles(string rootPath, List<string> filesPaths)
+        private string CopyFiles(string destinationPath, List<string> filesToCopyPaths)
         {
-            string nameOfCopyFolder = rootPath + "Kopia";
-            while(Directory.Exists(nameOfCopyFolder))
+            string nameOfCreatedFolder = destinationPath + "Kopia";
+            while(Directory.Exists(nameOfCreatedFolder))
             {
-                infoLabel.Text += "\nZnaleziono już folder " + nameOfCopyFolder + "\nSzukam wolnej nazwy...";
-                nameOfCopyFolder += "a";
+                infoLabel.Text += "\nZnaleziono już folder " + nameOfCreatedFolder + "\nSzukam wolnej nazwy...";
+                nameOfCreatedFolder += "a";
             }
 
-            Directory.CreateDirectory(nameOfCopyFolder);
-            infoLabel.Text += "\nTworzę folder " + nameOfCopyFolder + " i przenoszę do niego znelezione pliki.";
+            Directory.CreateDirectory(nameOfCreatedFolder);
+            infoLabel.Text += "\nTworzę folder " + nameOfCreatedFolder + " i przenoszę do niego znelezione pliki.";
 
-            foreach (string filePath in filesPaths)
+            foreach (string filePath in filesToCopyPaths)
             {
                 string fileName = filePath;
+                if (filePath.Contains(Path.DirectorySeparatorChar)) fileName = GetNameOfFileFromPath(filePath);
 
-                if (filePath.Contains(Path.DirectorySeparatorChar))
-                {
-                    string[] path = filePath.Split(Path.DirectorySeparatorChar);
-                    fileName = path[path.Length - 1];
-                }
-
-                File.Copy(rootPath + filePath, nameOfCopyFolder + Path.DirectorySeparatorChar + fileName);
+                File.Copy(filePath, nameOfCreatedFolder + Path.DirectorySeparatorChar + fileName);
             }
 
-            return nameOfCopyFolder;
+            return nameOfCreatedFolder;
+        }
+
+        private string GetPathOfParentDirectory(string filePath)
+        {
+            string[] path = filePath.Split(Path.DirectorySeparatorChar);
+            return filePath.Substring(0, filePath.Length - path[path.Length - 1].Length);
+        }
+
+        private string GetNameOfFileFromPath(string filePath)
+        {
+            string[] path = filePath.Split(Path.DirectorySeparatorChar);
+            return path[path.Length - 1];
         }
 
         private void changeFolderBtn_Click(object sender, EventArgs e)
         {
             folderBrowserDialog1.ShowDialog();
-
             _currentPath = folderBrowserDialog1.SelectedPath;
+
+            if(_currentPath == "") _currentPath = AppDomain.CurrentDomain.BaseDirectory;
             currentPathLabel.Text = _currentPath;
             infoLabel.Text = "Log List:\n";
 
