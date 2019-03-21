@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml;
 
 namespace CSharp_Lab3
 {
@@ -35,6 +36,8 @@ namespace CSharp_Lab3
                 {
                     path = result.Split(Path.DirectorySeparatorChar);
                     infoLabel.Text += "Znaleziono plik " + path[path.Length - 1] + "\nAnalizuję...\n";
+
+                    AnalyzeXML(result);
                 }
                 else
                 {
@@ -63,6 +66,29 @@ namespace CSharp_Lab3
             if (files.Length != 0) return files[0];
             return "";
         }
+
+        private void AnalyzeXML(string fileName)
+        {
+            infoLabel.Text += "Znalezione pliki: ";
+            XmlDocument doc = new XmlDocument();
+            doc.PreserveWhitespace = true;
+            doc.Load(fileName);
+
+            XmlNodeList elements1 = doc.GetElementsByTagName("Compile");
+            XmlNodeList elements2 = doc.GetElementsByTagName("EmbeddedResource");
+
+            foreach (XmlNode item in elements1)
+            {
+                infoLabel.Text += item.Attributes["Include"].Value + ", ";
+            }
+
+            foreach (XmlNode item in elements2)
+            {
+                infoLabel.Text += item.Attributes["Include"].Value + ", ";
+            }
+
+        }
+
 
         private void changeFolderBtn_Click(object sender, EventArgs e)
         {
