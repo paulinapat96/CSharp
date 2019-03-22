@@ -66,6 +66,7 @@ namespace CSharp_Lab3
             List<XmlNodeList> elements = new List<XmlNodeList>();
             elements.Add(doc.GetElementsByTagName("Compile"));
             elements.Add(doc.GetElementsByTagName("EmbeddedResource"));
+            elements.Add(doc.GetElementsByTagName("None"));
 
             infoLabel.Text += "Znalezione pliki: ";
             foreach (XmlNodeList element in elements)
