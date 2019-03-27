@@ -38,11 +38,17 @@
             this.toolRectangleBtn = new System.Windows.Forms.Button();
             this.toolEllipseBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.SizeBar = new System.Windows.Forms.HScrollBar();
+            this.label3 = new System.Windows.Forms.Label();
+            this.brushSizeLabel = new System.Windows.Forms.Label();
+            this.previewBoard = new System.Windows.Forms.Panel();
+            this.paintingBoard.SuspendLayout();
             this.SuspendLayout();
             // 
             // paintingBoard
             // 
             this.paintingBoard.BackColor = System.Drawing.Color.White;
+            this.paintingBoard.Controls.Add(this.previewBoard);
             this.paintingBoard.Location = new System.Drawing.Point(12, 12);
             this.paintingBoard.Name = "paintingBoard";
             this.paintingBoard.Size = new System.Drawing.Size(688, 426);
@@ -148,11 +154,53 @@
             this.label2.Text = "Set tool";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // SizeBar
+            // 
+            this.SizeBar.Location = new System.Drawing.Point(709, 275);
+            this.SizeBar.Name = "SizeBar";
+            this.SizeBar.Size = new System.Drawing.Size(80, 21);
+            this.SizeBar.TabIndex = 10;
+            this.SizeBar.Value = 50;
+            this.SizeBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.SizeBar_Scroll);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label3.Location = new System.Drawing.Point(706, 248);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 17);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Brush size";
+            // 
+            // brushSizeLabel
+            // 
+            this.brushSizeLabel.AutoSize = true;
+            this.brushSizeLabel.Location = new System.Drawing.Point(716, 296);
+            this.brushSizeLabel.MinimumSize = new System.Drawing.Size(70, 0);
+            this.brushSizeLabel.Name = "brushSizeLabel";
+            this.brushSizeLabel.Size = new System.Drawing.Size(70, 17);
+            this.brushSizeLabel.TabIndex = 12;
+            this.brushSizeLabel.Text = "5";
+            this.brushSizeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // previewBoard
+            // 
+            this.previewBoard.BackColor = System.Drawing.Color.Transparent;
+            this.previewBoard.Location = new System.Drawing.Point(1, 0);
+            this.previewBoard.Name = "previewBoard";
+            this.previewBoard.Size = new System.Drawing.Size(688, 426);
+            this.previewBoard.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.brushSizeLabel);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.SizeBar);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.toolRectangleBtn);
             this.Controls.Add(this.toolEllipseBtn);
@@ -165,6 +213,7 @@
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.paintingBoard.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,6 +231,10 @@
         private System.Windows.Forms.Button toolRectangleBtn;
         private System.Windows.Forms.Button toolEllipseBtn;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.HScrollBar SizeBar;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label brushSizeLabel;
+        private System.Windows.Forms.Panel previewBoard;
     }
 }
 

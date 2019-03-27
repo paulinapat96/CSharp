@@ -32,6 +32,7 @@ namespace CSharp_Lab4
         Tools currentTool;
         Bitmap preview;
         bool isPrevievModeActive;
+        float brushSize;
 
 
         public Form1()
@@ -49,6 +50,8 @@ namespace CSharp_Lab4
             preview = new Bitmap(paintingBoard.Size.Width, paintingBoard.Size.Height); // new Size(paintingBoard.Size.Width, paintingBoard.Size.Height)
             isPrevievModeActive = false;
             currentActiveButton = toolPenBtn;
+            brushSize = 5;
+            
 
             ChangeTool(Tools.PEN);
             paintingBoard.Controls.Clear();
@@ -106,21 +109,21 @@ namespace CSharp_Lab4
             switch (currentTool)
             {
                 case Tools.PEN:
-                    graph.DrawEllipse(new Pen(currentColor, 1), currentMousePos.x, currentMousePos.y, 1, 1);
+                    graph.DrawEllipse(new Pen(currentColor, brushSize), currentMousePos.x, currentMousePos.y, 1, 1);
                     break;
 
                 case Tools.EREASER:
-                    graph.DrawEllipse(new Pen(Color.White, 15), currentMousePos.x, currentMousePos.y, 50, 50);
+                    graph.DrawEllipse(new Pen(Color.White, 5 * brushSize), currentMousePos.x, currentMousePos.y, 50, 50);
                     break;
 
                 case Tools.LINE:
-                    graph.DrawLine(new Pen(currentColor, 2), startMousePos.x, startMousePos.y, currentMousePos.x, currentMousePos.y);
+                    graph.DrawLine(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, currentMousePos.x, currentMousePos.y);
                     break;
 
                 case Tools.ELLIPSE:
                     width = currentMousePos.x - startMousePos.x;
                     height = currentMousePos.y - startMousePos.y;
-                    graph.DrawEllipse(new Pen(currentColor, 2), startMousePos.x, startMousePos.y, width, height);
+                    graph.DrawEllipse(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, width, height);
                     break;
 
                 case Tools.RECTANGLE:
@@ -136,7 +139,7 @@ namespace CSharp_Lab4
                         startMousePos.y = currentMousePos.y;
                         height = Math.Abs(height);
                     }
-                    graph.DrawRectangle(new Pen(currentColor, 2), startMousePos.x, startMousePos.y, width, height);
+                    graph.DrawRectangle(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, width, height);
                     break;
             }
         }
@@ -172,7 +175,7 @@ namespace CSharp_Lab4
                 }
                 else if(isPrevievModeActive)
                 {
-                    /// DRAW PREVIEW ///////////////////////////////////////////////
+                    //preview
                 }
             }
         }
@@ -188,6 +191,7 @@ namespace CSharp_Lab4
                 {
                     paintingBoard_Paint(this, null);
                 }
+                isPrevievModeActive = false;
             }
         }
 
@@ -195,6 +199,12 @@ namespace CSharp_Lab4
         {
             ChangeTool(tool);
             currentActiveButton = (Button)sender;
+        }
+
+        private void SizeBar_Scroll(object sender, ScrollEventArgs e)
+        {
+            brushSize = (SizeBar.Value + 1.0f) / 10.0f;
+            brushSizeLabel.Text = brushSize.ToString();
         }
 
         private void colorBtn_Click(object sender, EventArgs e)
