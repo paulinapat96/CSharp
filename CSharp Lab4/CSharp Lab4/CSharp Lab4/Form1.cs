@@ -43,19 +43,20 @@ namespace CSharp_Lab4
 
         private void InitializeBoard()
         {
+            // ** Variables init
             ChangeColor(Color.Black);
             currentMousePos = new Vector2(0, 0);
             startMousePos = new Vector2(0, 0);
             currentTool = Tools.PEN;
-            preview = new Bitmap(paintingBoard.Size.Width, paintingBoard.Size.Height); // new Size(paintingBoard.Size.Width, paintingBoard.Size.Height)
+            preview = new Bitmap(paintingBoard.Size.Width, paintingBoard.Size.Height); 
             isPrevievModeActive = false;
             currentActiveButton = toolPenBtn;
             brushSize = 5;
             
-
             ChangeTool(Tools.PEN);
             paintingBoard.Controls.Clear();
 
+            // ** Listeners
             toolPenBtn.Click += (sender, EventArgs) => { toolBtn_Click( sender, EventArgs, Tools.PEN); };
             toolEreaserBtn.Click += (sender, EventArgs) => { toolBtn_Click(sender, EventArgs, Tools.EREASER); };
             toolLineBtn.Click += (sender, EventArgs) => { toolBtn_Click(sender, EventArgs, Tools.LINE); };
@@ -102,10 +103,10 @@ namespace CSharp_Lab4
             currentTool = tool;
         }
 
-        private void paintingBoard_Paint(object sender, PaintEventArgs e)
+        private void paintingBoard_Paint()
         {
             Graphics graph = paintingBoard.CreateGraphics();
-            int width, height;
+            Vector2 size;
             switch (currentTool)
             {
                 case Tools.PEN:
@@ -121,25 +122,25 @@ namespace CSharp_Lab4
                     break;
 
                 case Tools.ELLIPSE:
-                    width = currentMousePos.x - startMousePos.x;
-                    height = currentMousePos.y - startMousePos.y;
-                    graph.DrawEllipse(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, width, height);
+                    size.x = currentMousePos.x - startMousePos.x;
+                    size.y = currentMousePos.y - startMousePos.y;
+                    graph.DrawEllipse(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, size.x, size.y);
                     break;
 
                 case Tools.RECTANGLE:
-                    width = currentMousePos.x - startMousePos.x;
-                    height = currentMousePos.y - startMousePos.y;
-                    if (width < 0)
+                    size.x = currentMousePos.x - startMousePos.x;
+                    size.y = currentMousePos.y - startMousePos.y;
+                    if (size.x < 0)
                     {
                         startMousePos.x = currentMousePos.x;
-                        width = Math.Abs(width);
+                        size.x = Math.Abs(size.x);
                     }
-                    if (height < 0)
+                    if (size.y < 0)
                     {
                         startMousePos.y = currentMousePos.y;
-                        height = Math.Abs(height);
+                        size.y = Math.Abs(size.y);
                     }
-                    graph.DrawRectangle(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, width, height);
+                    graph.DrawRectangle(new Pen(currentColor, brushSize), startMousePos.x, startMousePos.y, size.x, size.y);
                     break;
             }
         }
@@ -167,15 +168,15 @@ namespace CSharp_Lab4
 
                 if(currentTool == Tools.PEN )
                 {
-                    paintingBoard_Paint(this, null);
+                    paintingBoard_Paint();
                 }
                 else if(currentTool == Tools.EREASER)
                 {
-                    paintingBoard_Paint(this, null);
+                    paintingBoard_Paint();
                 }
                 else if(isPrevievModeActive)
                 {
-                    //preview
+                    //preview code here
                 }
             }
         }
@@ -189,8 +190,9 @@ namespace CSharp_Lab4
 
                 if(currentTool != Tools.PEN || currentTool != Tools.EREASER)
                 {
-                    paintingBoard_Paint(this, null);
+                    paintingBoard_Paint();
                 }
+
                 isPrevievModeActive = false;
             }
         }

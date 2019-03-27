@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.paintingBoard = new System.Windows.Forms.Panel();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.previewBoard = new System.Windows.Forms.Panel();
             this.colorBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.toolPenBtn = new System.Windows.Forms.Button();
@@ -41,7 +41,6 @@
             this.SizeBar = new System.Windows.Forms.HScrollBar();
             this.label3 = new System.Windows.Forms.Label();
             this.brushSizeLabel = new System.Windows.Forms.Label();
-            this.previewBoard = new System.Windows.Forms.Panel();
             this.paintingBoard.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +55,14 @@
             this.paintingBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.paintingBoard_MouseDown);
             this.paintingBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.paintingBoard_MouseMove);
             this.paintingBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.paintingBoard_MouseUp);
+            // 
+            // previewBoard
+            // 
+            this.previewBoard.BackColor = System.Drawing.Color.Transparent;
+            this.previewBoard.Location = new System.Drawing.Point(1, 0);
+            this.previewBoard.Name = "previewBoard";
+            this.previewBoard.Size = new System.Drawing.Size(688, 426);
+            this.previewBoard.TabIndex = 1;
             // 
             // colorBtn
             // 
@@ -185,14 +192,6 @@
             this.brushSizeLabel.Text = "5";
             this.brushSizeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // previewBoard
-            // 
-            this.previewBoard.BackColor = System.Drawing.Color.Transparent;
-            this.previewBoard.Location = new System.Drawing.Point(1, 0);
-            this.previewBoard.Name = "previewBoard";
-            this.previewBoard.Size = new System.Drawing.Size(688, 426);
-            this.previewBoard.TabIndex = 1;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -222,7 +221,6 @@
         #endregion
 
         private System.Windows.Forms.Panel paintingBoard;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Button colorBtn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button toolPenBtn;
