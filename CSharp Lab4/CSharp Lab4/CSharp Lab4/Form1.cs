@@ -166,11 +166,7 @@ namespace CSharp_Lab4
                 currentMousePos.x = e.X;
                 currentMousePos.y = e.Y;
 
-                if(currentTool == Tools.PEN )
-                {
-                    paintingBoard_Paint();
-                }
-                else if(currentTool == Tools.EREASER)
+                if(currentTool == Tools.PEN || currentTool == Tools.EREASER)
                 {
                     paintingBoard_Paint();
                 }
