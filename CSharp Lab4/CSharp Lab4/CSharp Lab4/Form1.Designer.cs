@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.paintingBoard = new System.Windows.Forms.Panel();
-            this.previewBoard = new System.Windows.Forms.Panel();
             this.colorBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.toolPenBtn = new System.Windows.Forms.Button();
@@ -41,13 +40,11 @@
             this.SizeBar = new System.Windows.Forms.HScrollBar();
             this.label3 = new System.Windows.Forms.Label();
             this.brushSizeLabel = new System.Windows.Forms.Label();
-            this.paintingBoard.SuspendLayout();
             this.SuspendLayout();
             // 
             // paintingBoard
             // 
             this.paintingBoard.BackColor = System.Drawing.Color.White;
-            this.paintingBoard.Controls.Add(this.previewBoard);
             this.paintingBoard.Location = new System.Drawing.Point(12, 12);
             this.paintingBoard.Name = "paintingBoard";
             this.paintingBoard.Size = new System.Drawing.Size(688, 426);
@@ -55,14 +52,6 @@
             this.paintingBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.paintingBoard_MouseDown);
             this.paintingBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.paintingBoard_MouseMove);
             this.paintingBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.paintingBoard_MouseUp);
-            // 
-            // previewBoard
-            // 
-            this.previewBoard.BackColor = System.Drawing.Color.Transparent;
-            this.previewBoard.Location = new System.Drawing.Point(1, 0);
-            this.previewBoard.Name = "previewBoard";
-            this.previewBoard.Size = new System.Drawing.Size(688, 426);
-            this.previewBoard.TabIndex = 1;
             // 
             // colorBtn
             // 
@@ -212,7 +201,6 @@
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.Name = "Form1";
             this.Text = "Form1";
-            this.paintingBoard.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,7 +220,6 @@
         private System.Windows.Forms.HScrollBar SizeBar;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label brushSizeLabel;
-        private System.Windows.Forms.Panel previewBoard;
     }
 }
 
